@@ -1,11 +1,11 @@
 import json
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 from repositories.pokemon_repository import PokemonRepository
 from db.pokemon_db import PokemonDB
 from models.pokemon import Pokemon
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../www", template_folder="../www")
 app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -100,5 +100,9 @@ def search_pokemon(name):
         "image": my_pokemon.image
     })
 
+@app.route('/', strict_slashes=False)
+def index():
+    return render_template('index.html')
+
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
